@@ -80,7 +80,7 @@ For more details on how to get started, use [this link](https://cloud.ibm.com/do
                 claimName: <pvc_name>
       ```
 
-7. Verification 
+#### Verification ####
     
     This repo contains a sample [deployment.yaml] file that can be used to verify if you can successfully write data to the       COS bucket you used to mount
     1. Create the deployment
