@@ -16,7 +16,7 @@ NOTE: This document summarizes the info from official IBM Cloud documentation. I
         ```
 3.  Install the IBM Cloud Object Storage plug-in. Follow steps detailed [here](https://cloud.ibm.com/docs/containers?topic=containers-object_storage#install_cos)
 
-4.  Create a persistent volume claim (PVC) to provision IBM Cloud Object Storage for your cluster
+4.  Create a persistent volume claim (PVC) to provision IBM Cloud Object Storage for your cluster (`$ kubectl create -f pvc_1.yaml`
     The pvc yaml will look like the below :
       ```
       kind: PersistentVolumeClaim
@@ -39,9 +39,11 @@ NOTE: This document summarizes the info from official IBM Cloud documentation. I
             storage: 8Gi # Enter a fictitious value
         storageClassName: <storage_class>
       ```
-      This repo contains a sample yaml for pvc creation that you can use [pvc_create_bucket.yaml]
+      This repo contains a sample yaml for pvc creation that you can use [pvc_1.yaml]
       
       For more details on yaml file components, refer [here](https://cloud.ibm.com/docs/containers?topic=containers-object_storage#add_cos)
+      
+      
     
     
 5. Once you create a PVC, a PV will be created for you. Get the name of the PV as you should refer to the PV in your deployment.yaml file
