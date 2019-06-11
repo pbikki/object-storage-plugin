@@ -94,18 +94,18 @@ NOTE: This document summarizes the info from official IBM Cloud documentation. I
 #### Verification ####
     
   This repo contains a sample [deployment.yaml] file that can be used to verify if you can successfully write data to the       COS bucket you used to mount
-    1. Create the deployment
+    - Create the deployment
       ```$ kubectl create -f deployment.yaml```
-    2. Verify the pods created by the deployment
-    3. Shell into the pod using
+    - Verify the pods created by the deployment
+    - Shell into the pod using
        ```$ kubectl exec -it <pod-name> -it bash```
-    4. Navigate to the mount path specified in your deployment file (`mountPath: /<file_path>`)
-    5. Create a file
+    - Navigate to the mount path specified in your deployment file (`mountPath: /<file_path>`)
+    - Create a file
        ```$ echo "Hello World" > hello.txt```
-    6. Verify that your COS bucket has the file `hello.txt` in it
+    - Verify that your COS bucket has the file `hello.txt` in it
     
   ##### Important to note #####
-    To run the deployment as non-root user, note that the deployment uses 
+  To run the deployment as non-root user, note that the deployment uses 
     ```
     securityContext:
       runAsUser: <non_root_user_id>
