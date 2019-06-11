@@ -97,4 +97,5 @@ For more details on how to get started, use [this link](https://cloud.ibm.com/do
   ##### References #####
   https://cloud.ibm.com/docs/containers?topic=containers-cs_troubleshoot_storage#cos_pvc_pending
   https://cloud.ibm.com/docs/containers?topic=containers-cs_troubleshoot_storage#cos_nonroot_access
+  https://cloud.ibm.com/docs/containers?topic=containers-cs_troubleshoot_storage#missing_permissions
   
