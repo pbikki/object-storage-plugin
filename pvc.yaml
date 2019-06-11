@@ -1,0 +1,18 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: s3fs-pvc-create-bucket
+  namespace: default
+  annotations:
+    ibm.io/auto-create-bucket: "true"
+    ibm.io/auto-delete-bucket: "false"
+    ibm.io/bucket: "<provide-a-unique-bucket-name>"
+    #ibm.io/object-path: "<bucket_subdirectory>"
+    ibm.io/secret-name: "cos-write-access"
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi # Enter a fictitious value
+  storageClassName: ibmc-s3fs-standard-regional

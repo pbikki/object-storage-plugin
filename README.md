@@ -39,18 +39,33 @@ NOTE: This document summarizes the info from official IBM Cloud documentation. I
             storage: 8Gi # Enter a fictitious value
         storageClassName: <storage_class>
       ```
+<<<<<<< HEAD
       This repo contains a sample yaml for pvc creation that you can use [pvc_1.yaml]
       
       For more details on yaml file components, refer [here](https://cloud.ibm.com/docs/containers?topic=containers-object_storage#add_cos)
       
       
+=======
+      This repo contains a sample yaml for pvc creation that you can use [pvc.yaml]
+      
+      For more details on yaml file components, refer [here](https://cloud.ibm.com/docs/containers?topic=containers-object_storage#add_cos)
+
+      - Create PVC
+        `$ kubectl create -f pvc_1.yaml`
+      - Verify PVC is create and bound to the PV(should be created automatically)
+        `$ kubectl get pvc -n <namespace>`
+      - Get the volume name(`VOLUME`) that PVC is bound to from the output of above command. This name will be used as `<volume_name>` in the next step
+        Sample output looks like below:
+        ```
+        NAME           STATUS    VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS  AGE
+        s3fs-test-pvc  Bound     pvc-b38b30f9-1234-11e8-ad2b-t910456jbe12   8Gi        RWO    ibmc-s3fs-standard-cross-region  1h
+        ```
+      - Troubles with PVC. Refer [this](https://cloud.ibm.com/docs/containers?topic=containers-cs_troubleshoot_storage#cos_pvc_pending)
+
+      - Note that the sample [pvc.yaml] has `ibm.io/auto-create-bucket: "true"`. So, the service credentials created to access your COS should atleast have a `Writer` role in order to create a bucket. If you want to point to a bucket that already exists, use  `ibm.io/auto-create-bucket: "false"` in you `pvc.yaml` file
+>>>>>>> Initial files
     
-    
-5. Once you create a PVC, a PV will be created for you. Get the name of the PV as you should refer to the PV in your deployment.yaml file
-    ```
-    $ kubectl get pv -n <namespace>
-    ```
-6.  Create your deployment to mount your PV and specify the PVC created from [step 4]
+5.  Create your deployment to mount your PV and specify the PVC created from [step 4]
     A deployment yaml will look like this:
       ```
       apiVersion: apps/v1
@@ -84,6 +99,7 @@ NOTE: This document summarizes the info from official IBM Cloud documentation. I
       ```
 
 #### Verification ####
+<<<<<<< HEAD
 
 This repo contains a sample [deployment.yaml] file that can be used to verify if you can successfully write data to the      COS bucket you used to mount
 
@@ -96,13 +112,41 @@ This repo contains a sample [deployment.yaml] file that can be used to verify if
  - Create a file
    ```$ echo "Hello World" > hello.txt"```
  - Verify that your COS bucket has the file `hello.txt`
+=======
     
+    This repo contains a sample [deployment.yaml] file that can be used to verify if you can successfully write data to the       COS bucket you used to mount
+    1. Create the deployment
+      ```$ kubectl create -f deployment.yaml```
+    2. Verify the pods created by the deployment
+    3. Shell into the pod using
+       ```$ kubectl exec -it <pod-name> -it bash```
+    4. Navigate to the mount path specified in your deployment file (`mountPath: /<file_path>`)
+    5. Create a file
+       ```$ echo "Hello World" > hello.txt```
+    6. Verify that your COS bucket has the file `hello.txt` in it
+>>>>>>> Initial files
+    
+    ##### Important to note #####
+    To run the deployment as non-root user, note that the deployment uses 
+    ```
+    securityContext:
+      runAsUser: <non_root_user_id>
+      fsGroup: <non_root_user_id>
+    ```
+    Specifying the above will change the owner of the s3fs mount point to userID value provided in `runAsUser` and assign the ownership of COS Volume to that user group. Currently, you can modify the id, but `runAsUser` and `fsGroup` should have same id. If these two values do not match, the mount point is automatically owned by the root user.
+
 #### Troubleshooting ####
   If you face any issues during the process, use the following references to troubleshoot them
   ##### References #####
+<<<<<<< HEAD
   https://cloud.ibm.com/docs/containers?topic=containers-cs_troubleshoot_storage#cos_pvc_pending
   https://cloud.ibm.com/docs/containers?topic=containers-cs_troubleshoot_storage#cos_nonroot_access
   https://cloud.ibm.com/docs/containers?topic=containers-cs_troubleshoot_storage#missing_permissions
   
 Still having issues? [Get help](https://cloud.ibm.com/docs/containers?topic=containers-cs_troubleshoot_storage#storage_getting_help)
+=======
+  [PVC remains in pending state](https://cloud.ibm.com/docs/containers?topic=containers-cs_troubleshoot_storage#cos_pvc_pending)
+  [COS non-root user access](https://cloud.ibm.com/docs/containers?topic=containers-cs_troubleshoot_storage#cos_nonroot_access)
+  [PVC creation fails because of missing permissions](https://cloud.ibm.com/docs/containers?topic=containers-cs_troubleshoot_storage#missing_permissions)
+>>>>>>> Initial files
   
