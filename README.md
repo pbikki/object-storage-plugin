@@ -47,7 +47,7 @@ NOTE: This document summarizes the info from official IBM Cloud documentation. I
         `$ kubectl create -f pvc_1.yaml`
       - Verify PVC is create and bound to the PV(should be created automatically)
         `$ kubectl get pvc -n <namespace>`
-      - Get the volume name(`VOLUME`) that PVC is bound to from the output of above command. This name will be used as `<volume_name>` in the next step
+      - Get the volume name(`VOLUME`) that PVC is bound to from the output of above command. This name will be used as `<volume_name>` in the next step.
         Sample output looks like below:
         ```
         NAME           STATUS    VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS  AGE
@@ -55,9 +55,10 @@ NOTE: This document summarizes the info from official IBM Cloud documentation. I
         ```
       - Troubles with PVC. Refer [this](https://cloud.ibm.com/docs/containers?topic=containers-cs_troubleshoot_storage#cos_pvc_pending)
 
-      - Note that the sample [pvc.yaml] has `ibm.io/auto-create-bucket: "true"`. So, the service credentials created to access your COS should atleast have a `Writer` role in order to create a bucket. If you want to point to a bucket that already exists, use  `ibm.io/auto-create-bucket: "false"` in you `pvc.yaml` file
+      - Note that the sample [pvc.yaml] has `ibm.io/auto-create-bucket: "true"`. So, the service credentials created to access your COS should atleast have a `Writer` role in order to create a bucket. If you want to point to a bucket that already exists, use  `ibm.io/auto-create-bucket: "false"` in your `pvc.yaml` file
     
-5.  Create your deployment to mount your PV and specify the PVC created from [step 4]
+5.  Create a deployment to mount your PV and specify the PVC created from [step 4]
+    
     A deployment yaml will look like this:
       ```
       apiVersion: apps/v1
@@ -92,7 +93,7 @@ NOTE: This document summarizes the info from official IBM Cloud documentation. I
 
 #### Verification ####
     
-    This repo contains a sample [deployment.yaml] file that can be used to verify if you can successfully write data to the       COS bucket you used to mount
+  This repo contains a sample [deployment.yaml] file that can be used to verify if you can successfully write data to the       COS bucket you used to mount
     1. Create the deployment
       ```$ kubectl create -f deployment.yaml```
     2. Verify the pods created by the deployment
@@ -103,7 +104,7 @@ NOTE: This document summarizes the info from official IBM Cloud documentation. I
        ```$ echo "Hello World" > hello.txt```
     6. Verify that your COS bucket has the file `hello.txt` in it
     
-    ##### Important to note #####
+  ##### Important to note #####
     To run the deployment as non-root user, note that the deployment uses 
     ```
     securityContext:
