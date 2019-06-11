@@ -39,13 +39,6 @@ NOTE: This document summarizes the info from official IBM Cloud documentation. I
             storage: 8Gi # Enter a fictitious value
         storageClassName: <storage_class>
       ```
-<<<<<<< HEAD
-      This repo contains a sample yaml for pvc creation that you can use [pvc_1.yaml]
-      
-      For more details on yaml file components, refer [here](https://cloud.ibm.com/docs/containers?topic=containers-object_storage#add_cos)
-      
-      
-=======
       This repo contains a sample yaml for pvc creation that you can use [pvc.yaml]
       
       For more details on yaml file components, refer [here](https://cloud.ibm.com/docs/containers?topic=containers-object_storage#add_cos)
@@ -63,7 +56,6 @@ NOTE: This document summarizes the info from official IBM Cloud documentation. I
       - Troubles with PVC. Refer [this](https://cloud.ibm.com/docs/containers?topic=containers-cs_troubleshoot_storage#cos_pvc_pending)
 
       - Note that the sample [pvc.yaml] has `ibm.io/auto-create-bucket: "true"`. So, the service credentials created to access your COS should atleast have a `Writer` role in order to create a bucket. If you want to point to a bucket that already exists, use  `ibm.io/auto-create-bucket: "false"` in you `pvc.yaml` file
->>>>>>> Initial files
     
 5.  Create your deployment to mount your PV and specify the PVC created from [step 4]
     A deployment yaml will look like this:
@@ -99,20 +91,6 @@ NOTE: This document summarizes the info from official IBM Cloud documentation. I
       ```
 
 #### Verification ####
-<<<<<<< HEAD
-
-This repo contains a sample [deployment.yaml] file that can be used to verify if you can successfully write data to the      COS bucket you used to mount
-
- - Create the deployment
-   ```$ kubectl create -f deployment.yaml```
- - Verify the pods created by the deployment
- - Shell into the pod using
-   ```$ kubectl exec -it <pod-name> -it bash```
- - Navigate to the mount path specified in your deployment file (`mountPath: /<file_path>`)
- - Create a file
-   ```$ echo "Hello World" > hello.txt"```
- - Verify that your COS bucket has the file `hello.txt`
-=======
     
     This repo contains a sample [deployment.yaml] file that can be used to verify if you can successfully write data to the       COS bucket you used to mount
     1. Create the deployment
@@ -124,7 +102,6 @@ This repo contains a sample [deployment.yaml] file that can be used to verify if
     5. Create a file
        ```$ echo "Hello World" > hello.txt```
     6. Verify that your COS bucket has the file `hello.txt` in it
->>>>>>> Initial files
     
     ##### Important to note #####
     To run the deployment as non-root user, note that the deployment uses 
@@ -138,15 +115,7 @@ This repo contains a sample [deployment.yaml] file that can be used to verify if
 #### Troubleshooting ####
   If you face any issues during the process, use the following references to troubleshoot them
   ##### References #####
-<<<<<<< HEAD
-  https://cloud.ibm.com/docs/containers?topic=containers-cs_troubleshoot_storage#cos_pvc_pending
-  https://cloud.ibm.com/docs/containers?topic=containers-cs_troubleshoot_storage#cos_nonroot_access
-  https://cloud.ibm.com/docs/containers?topic=containers-cs_troubleshoot_storage#missing_permissions
-  
-Still having issues? [Get help](https://cloud.ibm.com/docs/containers?topic=containers-cs_troubleshoot_storage#storage_getting_help)
-=======
   [PVC remains in pending state](https://cloud.ibm.com/docs/containers?topic=containers-cs_troubleshoot_storage#cos_pvc_pending)
   [COS non-root user access](https://cloud.ibm.com/docs/containers?topic=containers-cs_troubleshoot_storage#cos_nonroot_access)
   [PVC creation fails because of missing permissions](https://cloud.ibm.com/docs/containers?topic=containers-cs_troubleshoot_storage#missing_permissions)
->>>>>>> Initial files
   
