@@ -1,6 +1,7 @@
 # object-storage
 Using IBM Cloud Object Storage as a persistent storage for your apps that run on IKS cluster
-For more details on how to get started, use [this link](https://cloud.ibm.com/docs/containers?topic=containers-object_storage#add_cos)
+
+NOTE: This document summarizes the info from official IBM Cloud documentation. If you need more info, checkout [Storing data on IBM Cloud Object Storage](https://cloud.ibm.com/docs/containers?topic=containers-object_storage#add_cos)
 
 1. You should have an object storage service instance and service credentials. Details [here](https://cloud.ibm.com/docs/containers?topic=containers-object_storage#create_cos_service)
 
@@ -81,21 +82,25 @@ For more details on how to get started, use [this link](https://cloud.ibm.com/do
       ```
 
 #### Verification ####
-    
-    This repo contains a sample [deployment.yaml] file that can be used to verify if you can successfully write data to the       COS bucket you used to mount
-    1. Create the deployment
-      ```$ kubectl create -f deployment.yaml```
-    2. Verify the pods created by the deployment
-    3. Shell into the pod using
-       ```$ kubectl exec -it <pod-name> -it bash```
-    4. Navigate to the mount path specified in your deployment file (`mountPath: /<file_path>`)
-    5. Create a file
-       ```$ echo "Hello World" > hello.txt"```
-    6. Verify that your COS bucket has the file `hello.txt` in it
+
+This repo contains a sample [deployment.yaml] file that can be used to verify if you can successfully write data to the      COS bucket you used to mount
+
+ - Create the deployment
+   ```$ kubectl create -f deployment.yaml```
+ - Verify the pods created by the deployment
+ - Shell into the pod using
+   ```$ kubectl exec -it <pod-name> -it bash```
+ - Navigate to the mount path specified in your deployment file (`mountPath: /<file_path>`)
+ - Create a file
+   ```$ echo "Hello World" > hello.txt"```
+ - Verify that your COS bucket has the file `hello.txt`
     
 #### Troubleshooting ####
+  If you face any issues during the process, use the following references to troubleshoot them
   ##### References #####
   https://cloud.ibm.com/docs/containers?topic=containers-cs_troubleshoot_storage#cos_pvc_pending
   https://cloud.ibm.com/docs/containers?topic=containers-cs_troubleshoot_storage#cos_nonroot_access
   https://cloud.ibm.com/docs/containers?topic=containers-cs_troubleshoot_storage#missing_permissions
+  
+Still having issues? [Get help](https://cloud.ibm.com/docs/containers?topic=containers-cs_troubleshoot_storage#storage_getting_help)
   
