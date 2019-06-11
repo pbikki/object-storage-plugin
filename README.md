@@ -16,7 +16,7 @@ NOTE: This document summarizes the info from official IBM Cloud documentation. I
         ```
 3.  Install the IBM Cloud Object Storage plug-in. Follow steps detailed [here](https://cloud.ibm.com/docs/containers?topic=containers-object_storage#install_cos)
 
-4.  Create a persistent volume claim (PVC) to provision IBM Cloud Object Storage for your cluster (`$ kubectl create -f pvc_1.yaml`
+4.  Create a persistent volume claim (PVC) to provision IBM Cloud Object Storage for your cluster
     The pvc yaml will look like the below :
       ```
       kind: PersistentVolumeClaim
@@ -39,25 +39,26 @@ NOTE: This document summarizes the info from official IBM Cloud documentation. I
             storage: 8Gi # Enter a fictitious value
         storageClassName: <storage_class>
       ```
-      This repo contains a sample yaml for pvc creation that you can use [pvc.yaml]
+      This repo contains a sample yaml for pvc creation that you can use [pvc.yaml](pvc.yaml)
       
       For more details on yaml file components, refer [here](https://cloud.ibm.com/docs/containers?topic=containers-object_storage#add_cos)
 
       - Create PVC
-        `$ kubectl create -f pvc_1.yaml`
+        ```$ kubectl create -f pvc.yaml```
       - Verify PVC is create and bound to the PV(should be created automatically)
-        `$ kubectl get pvc -n <namespace>`
-      - Get the volume name(`VOLUME`) that PVC is bound to from the output of above command. This name will be used as `<volume_name>` in the next step.
+        ```$ kubectl get pvc -n <namespace>```
         Sample output looks like below:
         ```
         NAME           STATUS    VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS  AGE
         s3fs-test-pvc  Bound     pvc-b38b30f9-1234-11e8-ad2b-t910456jbe12   8Gi        RWO    ibmc-s3fs-standard-cross-region  1h
         ```
+      - Get the volume name(`VOLUME`) that PVC is bound to, from the output of above command. This name will be used to replace `<volume_name>` in your `deployment.yaml` file.
+
       - Troubles with PVC. Refer [this](https://cloud.ibm.com/docs/containers?topic=containers-cs_troubleshoot_storage#cos_pvc_pending)
 
       - Note that the sample [pvc.yaml] has `ibm.io/auto-create-bucket: "true"`. So, the service credentials created to access your COS should atleast have a `Writer` role in order to create a bucket. If you want to point to a bucket that already exists, use  `ibm.io/auto-create-bucket: "false"` in your `pvc.yaml` file
     
-5.  Create a deployment to mount your PV and specify the PVC created from [step 4]
+5.  Create a deployment to mount your PV and specify the name of PVC created from above
     
     A deployment yaml will look like this:
       ```
@@ -93,16 +94,17 @@ NOTE: This document summarizes the info from official IBM Cloud documentation. I
 
 #### Verification ####
     
-  This repo contains a sample [deployment.yaml] file that can be used to verify if you can successfully write data to the       COS bucket you used to mount
-    - Create the deployment
-      ```$ kubectl create -f deployment.yaml```
-    - Verify the pods created by the deployment
-    - Shell into the pod using
-       ```$ kubectl exec -it <pod-name> -it bash```
-    - Navigate to the mount path specified in your deployment file (`mountPath: /<file_path>`)
-    - Create a file
-       ```$ echo "Hello World" > hello.txt```
-    - Verify that your COS bucket has the file `hello.txt` in it
+  This repo contains a sample [deployment.yaml](deployment.yaml) file that can be used to verify if you can successfully write data to the COS bucket used for the mount
+  - Create the deployment
+    ```$ kubectl create -f deployment.yaml```
+  - Verify the pods created by the deployment
+    ```$ kubectl get pods -n <namespace>```
+  - Shell into the pod created by the deployment using
+    ```$ kubectl exec -it <pod-name> -it bash```
+  - Navigate to the mount path specified in your deployment file (`mountPath: /<file_path>`)
+  - Create a file
+    ```$ echo "Hello World" > hello.txt```
+  - Verify that your COS bucket has the file `hello.txt` in it
     
   ##### Important to note #####
   To run the deployment as non-root user, note that the deployment uses 
@@ -116,7 +118,7 @@ NOTE: This document summarizes the info from official IBM Cloud documentation. I
 #### Troubleshooting ####
   If you face any issues during the process, use the following references to troubleshoot them
   ##### References #####
-  [PVC remains in pending state](https://cloud.ibm.com/docs/containers?topic=containers-cs_troubleshoot_storage#cos_pvc_pending)
-  [COS non-root user access](https://cloud.ibm.com/docs/containers?topic=containers-cs_troubleshoot_storage#cos_nonroot_access)
-  [PVC creation fails because of missing permissions](https://cloud.ibm.com/docs/containers?topic=containers-cs_troubleshoot_storage#missing_permissions)
+  - [PVC remains in pending state](https://cloud.ibm.com/docs/containers?topic=containers-cs_troubleshoot_storage#cos_pvc_pending)
+  - [COS non-root user access](https://cloud.ibm.com/docs/containers?topic=containers-cs_troubleshoot_storage#cos_nonroot_access)
+  - [PVC creation fails because of missing permissions](https://cloud.ibm.com/docs/containers?topic=containers-cs_troubleshoot_storage#missing_permissions)
   
