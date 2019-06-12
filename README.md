@@ -40,20 +40,20 @@ NOTE: This document summarizes the info from official IBM Cloud documentation. I
         storageClassName: <storage_class>
       ```
       This repo contains a sample yaml for pvc creation that you can use [pvc.yaml](pvc.yaml)
-      - Create PVC
-        ```$ kubectl create -f pvc.yaml```
-      - Verify PVC is create and bound to the PV(should be created automatically)
-        ```$ kubectl get pvc -n <namespace>```
-        Sample output looks like below:
-        ```
-        NAME           STATUS    VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS  AGE
-        s3fs-test-pvc  Bound     pvc-b38b30f9-1234-11e8-ad2b-t910456jbe12   8Gi        RWO    ibmc-s3fs-standard-cross-region  1h
-        ```
-      - Get the volume name(`VOLUME`) that PVC is bound to, from the output of above command. This name will be used to replace `<volume_name>` in your `deployment.yaml` file.
+    - Create PVC
+      ```$ kubectl create -f pvc.yaml```
+    - Verify PVC is create and bound to the PV(should be created automatically)
+      ```$ kubectl get pvc -n <namespace>```
+      Sample output looks like below:
+      ```
+      NAME           STATUS    VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS  AGE
+      s3fs-test-pvc  Bound     pvc-b38b30f9-1234-11e8-ad2b-t910456jbe12   8Gi        RWO    ibmc-s3fs-standard-cross-region  1h
+      ```
+    - Get the volume name(`VOLUME`) that PVC is bound to, from the output of above command. This name will be used to replace `<volume_name>` in your `deployment.yaml` file.
 
-      - Troubles with PVC. Refer [this](https://cloud.ibm.com/docs/containers?topic=containers-cs_troubleshoot_storage#cos_pvc_pending)
+    - Troubles with PVC. Refer [this](https://cloud.ibm.com/docs/containers?topic=containers-cs_troubleshoot_storage#cos_pvc_pending)
 
-      - Note that the sample [pvc.yaml](pvc.yaml) has `ibm.io/auto-create-bucket: "true"`. So, the service credentials created to access your COS should atleast have a `Writer` role in order to create a bucket. If you want to point to a bucket that already exists, use  `ibm.io/auto-create-bucket: "false"` in your `pvc.yaml` file
+    - Note that the sample [pvc.yaml](pvc.yaml) has `ibm.io/auto-create-bucket: "true"`. So, the service credentials created to access your COS should atleast have a `Writer` role in order to create a bucket. If you want to point to a bucket that already exists, use  `ibm.io/auto-create-bucket: "false"` in your `pvc.yaml` file
       
       For more details on yaml file components, refer [here](https://cloud.ibm.com/docs/containers?topic=containers-object_storage#add_cos)
 
