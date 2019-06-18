@@ -12,7 +12,7 @@ NOTE: This document summarizes the info from official IBM Cloud documentation. I
         ```
     2. If using HMAC credentials,
         ```
-        $ kubectl create secret generic cos-write-access --type=ibm/ibmc-s3fs --from-literal=access-key=<access_key_ID> --from- literal=secret-key=<secret_access_key> -n <namespace>
+        $ kubectl create secret generic cos-write-access --type=ibm/ibmc-s3fs --from-literal=access-key=<access_key_ID> --from-literal=secret-key=<secret_access_key> -n <namespace>
         ```
 3.  Install the IBM Cloud Object Storage plug-in. Follow steps detailed [here](https://cloud.ibm.com/docs/containers?topic=containers-object_storage#install_cos)
 
