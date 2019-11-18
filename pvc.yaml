@@ -9,6 +9,7 @@ metadata:
     ibm.io/bucket: "<provide-a-unique-bucket-name>"
     #ibm.io/object-path: "<bucket_subdirectory>"
     ibm.io/secret-name: "cos-write-access"
+    ibm.io/endpoint: "http://s3.us-south.cloud-object-storage.appdomain.cloud" # change it accordingly
 spec:
   accessModes:
     - ReadWriteOnce

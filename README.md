@@ -3,6 +3,8 @@ Using IBM Cloud Object Storage as a persistent storage for your apps that run on
 
 NOTE: This document summarizes the info from official IBM Cloud documentation. If you need more info, checkout [Storing data on IBM Cloud Object Storage](https://cloud.ibm.com/docs/containers?topic=containers-object_storage#add_cos)
 
+NOTE: For each of the below steps, if using **OpenShift cluster on IBM Cloud**, you can use equivalent `oc` commands
+
 1. You should have an object storage service instance and service credentials. Details [here](https://cloud.ibm.com/docs/containers?topic=containers-object_storage#create_cos_service)
 
 2. Create a kubernetes secret using the service credentials foryour COS instance to be accessible from IKS cluster
@@ -14,7 +16,8 @@ NOTE: This document summarizes the info from official IBM Cloud documentation. I
         ```
         $ kubectl create secret generic cos-write-access --type=ibm/ibmc-s3fs --from-literal=access-key=<access_key_ID> --from-literal=secret-key=<secret_access_key> -n <namespace>
         ```
-3.  Install the IBM Cloud Object Storage plug-in. Follow steps detailed [here](https://cloud.ibm.com/docs/containers?topic=containers-object_storage#install_cos)
+3.  - Install the IBM Cloud Object Storage plug-in. Follow steps detailed here [IBM Cloud Object Storage plug-in for IKS](https://cloud.ibm.com/docs/containers?topic=containers-object_storage#install_cos)
+    - For Openshift cluster on BM Cloud, follow the steps detailed here [IBM Cloud Object Storage plug-in for OpenShift on IBM Cloud](https://cloud.ibm.com/docs/openshift?topic=openshift-object_storage&locale=en#install_cos)
 
 4.  Create a persistent volume claim (PVC) to provision IBM Cloud Object Storage for your cluster
     The pvc yaml will look like the below :
@@ -50,7 +53,6 @@ NOTE: This document summarizes the info from official IBM Cloud documentation. I
       NAME           STATUS    VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS  AGE
       s3fs-test-pvc  Bound     pvc-b38b30f9-1234-11e8-ad2b-t910456jbe12   8Gi        RWO    ibmc-s3fs-standard-cross-region  1h
       ```
-    - Get the volume name(`VOLUME`) that PVC is bound to, from the output of above command. This name will be used to replace `<volume_name>` in your `deployment.yaml` file.
 
     - Troubles with PVC. Refer [this](https://cloud.ibm.com/docs/containers?topic=containers-cs_troubleshoot_storage#cos_pvc_pending)
 
@@ -68,6 +70,7 @@ NOTE: This document summarizes the info from official IBM Cloud documentation. I
         name: <deployment_name>
         labels:
           app: <deployment_label>
+        namespace: <project/namespace_name>
       spec:
         selector:
           matchLabels:
@@ -94,17 +97,20 @@ NOTE: This document summarizes the info from official IBM Cloud documentation. I
 
 #### Verification ####
     
-  This repo contains a sample [deployment.yaml](deployment.yaml) file that can be used to verify if you can successfully write data to the COS bucket used for the mount
+  This repo contains a sample [deployment.yaml](deployment.yaml) file that can be used to verify if you can successfully write data to the COS bucket used for the mount. For oenshift clusters, similar deployment can be used. With the new version of plugin installed on OpenShift clusters, the [openshift-deployment.yaml](openshift-deployment.yaml) worked without having to provide any explicit `securityContext`. 
+
+  **ToDO:** Verify if it works for IKS as well without providing any `securityContext`
   - Create the deployment
     ```$ kubectl create -f deployment.yaml```
   - Verify the pods created by the deployment
     ```$ kubectl get pods -n <namespace>```
   - Shell into the pod created by the deployment using
     ```$ kubectl exec -it <pod-name> -it bash```
+    ```$ oc rsh <pod-name```
   - Navigate to the mount path specified in your deployment file (`mountPath: /<file_path>`)
   - Create a file
     ```$ echo "Hello World" > hello.txt```
-  - Verify that your COS bucket has the file `hello.txt` in it
+  - From the IBM Cloud UI, verify that your COS bucket has the file `hello.txt` in it
     
   ##### Important to note #####
   To run the deployment as non-root user, note that the deployment uses 

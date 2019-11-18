@@ -1,31 +1,32 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: test
+  name: os-test-1
+  namespace: <project_name>
   labels:
-    app: test
-  namespace: <namespace>
+    app: os-test-1
 spec:
   selector:
     matchLabels:
-      app: test
+      app: os-test-1
+  replicas: 1
   template:
     metadata:
       labels:
-        app: test
+        app: os-test-1
     spec:
       containers:
       - image: ubuntu:16.04
         name: test
         command: ["tail", "-f", "/dev/null"]
-        securityContext:
-          runAsUser: 1000
-          fsGroup: 1000 #only applicable for clusters that run Kubernetes version 1.13 or later
+        # securityContext:
+        #   runAsUser: 1000
+        #   fsGroup: 1000 #only applicable for clusters that run Kubernetes version 1.13 or later
         volumeMounts:
-        - name: <volume_name>
-          mountPath: /cos-test
+        - name: cos-mount-1
+          mountPath: /cos-test-1
       volumes:
-      - name: <volume_name>
+      - name: cos-mount-1
         persistentVolumeClaim:
           claimName: s3fs-pvc-create-bucket
 
