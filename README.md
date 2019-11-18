@@ -1,9 +1,9 @@
-# object-storage
-Using IBM Cloud Object Storage as a persistent storage for your apps that run on IKS cluster
+# object-storage-plugin
+To use IBM Cloud Object Storage as a persistent storage for your apps that run on IKS or OpenShift on IBM Cloud cluster, you can install the [IBM Object Storage Plugin](https://github.com/IBM/ibmcloud-object-storage-plugin). It enables the kube pods to access IBM COS buckets by mounting the buckets on worker nodes.
 
 NOTE: This document summarizes the info from official IBM Cloud documentation. If you need more info, checkout [Storing data on IBM Cloud Object Storage](https://cloud.ibm.com/docs/containers?topic=containers-object_storage#add_cos)
 
-NOTE: For each of the below steps, if using **OpenShift cluster on IBM Cloud**, you can use equivalent `oc` commands
+NOTE: For each of the below steps, if using **OpenShift cluster on IBM Cloud**, you can also use equivalent `oc` commands
 
 1. You should have an object storage service instance and service credentials. Details [here](https://cloud.ibm.com/docs/containers?topic=containers-object_storage#create_cos_service)
 
@@ -17,7 +17,7 @@ NOTE: For each of the below steps, if using **OpenShift cluster on IBM Cloud**, 
         $ kubectl create secret generic cos-write-access --type=ibm/ibmc-s3fs --from-literal=access-key=<access_key_ID> --from-literal=secret-key=<secret_access_key> -n <namespace>
         ```
 3.  - Install the IBM Cloud Object Storage plug-in. Follow steps detailed here [IBM Cloud Object Storage plug-in for IKS](https://cloud.ibm.com/docs/containers?topic=containers-object_storage#install_cos)
-    - For Openshift cluster on BM Cloud, follow the steps detailed here [IBM Cloud Object Storage plug-in for OpenShift on IBM Cloud](https://cloud.ibm.com/docs/openshift?topic=openshift-object_storage&locale=en#install_cos)
+    - For Openshift cluster on IBM Cloud, follow the steps detailed here [IBM Cloud Object Storage plug-in for OpenShift on IBM Cloud](https://cloud.ibm.com/docs/openshift?topic=openshift-object_storage&locale=en#install_cos)
 
 4.  Create a persistent volume claim (PVC) to provision IBM Cloud Object Storage for your cluster
     The pvc yaml will look like the below :
@@ -94,12 +94,15 @@ NOTE: For each of the below steps, if using **OpenShift cluster on IBM Cloud**, 
               persistentVolumeClaim:
                 claimName: <pvc_name>
       ```
+      - Create a sample deployment to test if your object storage buckets are really mounted
+      ```kubectl create -f deployment.yaml``` 
+      - Sample files 
+        - [deployment.yaml](deployment.yaml)
+        - [openshift-deployment.yaml](openshift-deployment.yaml)
 
 #### Verification ####
     
-  This repo contains a sample [deployment.yaml](deployment.yaml) file that can be used to verify if you can successfully write data to the COS bucket used for the mount. For oenshift clusters, similar deployment can be used. With the new version of plugin installed on OpenShift clusters, the [openshift-deployment.yaml](openshift-deployment.yaml) worked without having to provide any explicit `securityContext`. 
-
-  **ToDO:** Verify if it works for IKS as well without providing any `securityContext`
+  This repo contains a sample [deployment.yaml](deployment.yaml) file that can be used to verify if you can successfully write data to the COS bucket used for the mount. For oenshift clusters, similar deployment can be used. With the new version of plugin installed on OpenShift clusters, the [openshift-deployment.yaml](openshift-deployment.yaml) worked without having to provide any explicit `securityContext`. [**ToDO:** Verify if it works for IKS as well without providing any `securityContext`]
   - Create the deployment
     ```$ kubectl create -f deployment.yaml```
   - Verify the pods created by the deployment
